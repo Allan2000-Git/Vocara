@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { ButtonsCard } from "@/components/ui/tailwindcss-buttons";
+"use client";
+
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
-import { SignInButton } from "@clerk/nextjs";
+import { useSession } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function Home() {
+  const { isLoaded, session, isSignedIn } = useSession();
+  console.log(session?.user.id)
   const words = [
     {
       text: "Achieve",
@@ -31,11 +34,11 @@ export default function Home() {
           </p>
           <TypewriterEffect words={words} />
           <div className="mt-10">
-          <SignInButton>
-            <Button className="inline-flex text-md h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+            <Link
+            href={isSignedIn ? "/dashboard" : "/sign-in"}
+            className="inline-flex text-md h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
               Get started
-            </Button>
-          </SignInButton>
+            </Link>
           </div>
         </div>
       </div>

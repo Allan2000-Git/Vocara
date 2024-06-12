@@ -8,3 +8,14 @@ export const formSchema = z.object({
 });
 
 export type JobSchemaType = z.infer<typeof formSchema>;
+
+export type InterviewDetails = {
+    id: string;
+    userId: string;
+    mockId: string;
+    jobRole: string;
+    jobExperience: string;
+    jobDescription: string;
+    mockResponse: any;
+    createdAt: string;
+};
