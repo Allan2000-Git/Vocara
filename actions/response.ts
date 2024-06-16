@@ -16,3 +16,15 @@ export async function generateResponse(values: JobSchemaType) {
     const mockResponse = (result.response.text()).replace("```json", "").replace("```","");
     return mockResponse;
 }
+
+export async function generateFeedback(question: string, answer: string) {
+
+    const INPUT_PROMPT = `Question: ${question} and Answer: ${answer}. Based on the candidate's answers to the interview question, provide detailed feedback focusing on areas of
+    improvement and an overall rating. For the given question and corresponding answer, highlight the strengths of the candidate's response,
+    identify specific areas where the candidate can improve, and provide a brief feedback and overall rating on a scale of 1 to 5, where 1 is poor and 5 is excellent.
+    Give me a JSON response containing overall_rating field and feedback field.`
+
+    const result = await chatSession.sendMessage(INPUT_PROMPT);
+    const mockResponse = (result.response.text()).replace("```json", "").replace("```","");
+    return mockResponse;
+}
