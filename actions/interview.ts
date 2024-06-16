@@ -6,7 +6,7 @@ import { AnswerType, InterviewDetails, JobSchemaType } from "@/types/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 
 export async function createInterview(values: JobSchemaType) {
     try {
@@ -73,6 +73,29 @@ export async function storeAnswer(values: AnswerType) {
         return newAnswer;
     } catch (error) {
         console.log(error);
+        return error;
+    }
+}
+
+export async function getAnswersById(mockId: string) {
+    try {
+        const user = await currentUser();
+        if (!user) {
+            throw new Error("You must be logged in to start an interview.");
+        }
+        const answer = await db.select().from(answers).where(
+            and(
+                eq(answers.userId, user.id),
+                eq(answers.mockId, mockId)
+            )
+        ).orderBy(asc(answers.createdAt));
+
+        if (answer.length === 0) {
+            throw new Error('No answers found for the given mockId.');
+        }
+
+        return answer;
+    } catch (error) {
         return error;
     }
 }
