@@ -19,3 +19,12 @@ export type InterviewDetails = {
     mockResponse: any;
     createdAt: string;
 };
+
+export type AnswerType = {
+    mockId: string;
+    question: string;
+    possibleAnswer: string;
+    userAnswer: string;
+    feedback: string;
+    overall_rating: number;
+};
