@@ -4,8 +4,12 @@ import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs';
 import { NavbarDemo } from "./_components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { InterviewContextProvider } from "@/context/InterviewContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  variable: "--font-inter",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   title: "Vocara - Your Ultimate Mock Interview Platform",
@@ -19,11 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className={`${inter.variable}`}>
         <body className={inter.className}>
-          <NavbarDemo />
-          {children}
-          <Toaster richColors />
+          <InterviewContextProvider>
+            <NavbarDemo />
+            {children}
+            <Toaster richColors />
+          </InterviewContextProvider>
         </body>
       </html>
     </ClerkProvider>
