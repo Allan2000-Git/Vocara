@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import { and, asc, eq } from "drizzle-orm";
 
+// Interviews
+
 export async function createInterview(values: JobSchemaType) {
     try {
         const user = await currentUser();
@@ -25,8 +27,8 @@ export async function createInterview(values: JobSchemaType) {
         }).returning({mockId: interviews.mockId});
 
         return newInterview;
-    } catch (error) {
-        throw new Error('Something went wrong while start an interview.')
+    } catch (error: any) {
+        throw new Error(error.message)
     }
 }
 
@@ -47,10 +49,29 @@ export async function getInterviewDetailsById(mockId: string) {
         }
 
         return interview[0] as InterviewDetails;
-    } catch (error) {
-        throw new Error('Something went wrong while getting the details.')
+    } catch (error: any) {
+        throw new Error(error.message)
     }
 }
+
+export async function getInterviewDetails() {
+    try {
+        const user = await currentUser();
+        if (!user) {
+            throw new Error("You must be logged in to see your interviews.");
+        }
+        const interviewList = await db.select().from(interviews).where(eq(interviews.userId, user.id));
+        if (interviewList.length === 0) {
+            return [];
+        }
+
+        return interviewList;
+    } catch (error: any) {
+        throw new Error(error.message)
+    }
+}
+
+// Answers
 
 export async function storeAnswer(values: AnswerType) {
     try {
