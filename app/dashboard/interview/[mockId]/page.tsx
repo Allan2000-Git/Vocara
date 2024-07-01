@@ -1,44 +1,31 @@
 "use client";
 
-import { getInterviewDetailsById } from '@/actions/interview';
-import { InfoIcon, WebcamIcon } from 'lucide-react';
+import { InfoIcon} from 'lucide-react';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-import { toast } from 'sonner';
-import Webcam from "react-webcam";
+import React, { useEffect } from 'react'
 import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { InterviewDetails } from '@/types/types';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from 'next/link';
+import { useInterviewContext } from '@/context/InterviewContext';
+import { Skeleton } from '@/components/ui/skeleton';
+import WebCamera from '@/app/_components/WebCamera';
 
 function Interview() {
     const {mockId} = useParams();
-    const [interviewDetails, setInterviewDetails] = useState<InterviewDetails>();
-    const [isWebCamEnabled, setIsWebCamEnabled] = useState(false);
+    const {interviewDetails, getInterviewDetails} = useInterviewContext();
 
     useEffect(() => {
-        const getInterviewDetails = async () => {
-            try {
-                const result = await getInterviewDetailsById(mockId as string);
-                setInterviewDetails(result);
-            } catch (error) {
-                if (error instanceof Error) {
-                    toast.error(error.message);
-                } else {
-                    toast.error("An unknown error occurred.");
-                }
-            }
-        }
-
-        getInterviewDetails();
-    }, [mockId]);
+        const fetchDetails = async () => {
+            await getInterviewDetails(mockId as string);
+        };
+        fetchDetails();
+    }, [getInterviewDetails, mockId]);
 
     return (
         <>
@@ -51,14 +38,26 @@ function Interview() {
                                 <CardTitle>Interview Details</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p>Position: <span className="font-semibold">{interviewDetails?.jobRole}</span></p>
+                                {
+                                    interviewDetails.jobRole ?
+                                    <p>Position: <span className="font-semibold">{interviewDetails.jobRole}</span></p>  :
+                                    <Skeleton className="h-5 rounded-full" />
+                                }
                             </CardContent>
-                            <CardFooter>
-                                <p>Years of experience: <span className="font-semibold">{interviewDetails?.jobExperience}</span></p>
-                            </CardFooter>
-                            <CardFooter>
-                                <p>Skills: <span className="font-semibold">{interviewDetails?.jobDescription}</span></p>
-                            </CardFooter>
+                            <CardContent>
+                                {
+                                    interviewDetails.jobExperience ?
+                                    <p>Years of experience: <span className="font-semibold">{interviewDetails.jobExperience}</span></p>  :
+                                    <Skeleton className="h-5 rounded-full" />
+                                }
+                            </CardContent>
+                            <CardContent>
+                                {
+                                    interviewDetails.jobDescription ?
+                                    <p>Skills: <span className="font-semibold">{interviewDetails.jobDescription}</span></p>  :
+                                    <Skeleton className="h-5 rounded-full" />
+                                }
+                            </CardContent>
                         </Card>
                         <Alert className="text-yellow-500 border-yellow-500">
                             <InfoIcon className="h-4 w-4 text-yellow-500" />
@@ -70,34 +69,7 @@ function Interview() {
                         </Alert>
 
                     </div>
-                    <div className="w-full">
-                    {
-                        isWebCamEnabled ? (
-                            <div>
-                                <Webcam
-                                width={400}
-                                height={400}
-                                mirrored={true}
-                                onUserMedia={() => setIsWebCamEnabled(true)}
-                                onUserMediaError={() => setIsWebCamEnabled(false)}
-                                />
-                            </div>
-                        ):(
-                            <div>
-                                <div className="flex flex-col items-center justify-center gap-5 p-10 bg-muted h-[350px] max-h-[400px] rounded-xl">
-                                    <WebcamIcon size={36} />
-                                    <p className="font-medium">You have disabled your Web Camera</p>
-                                </div>
-                            </div>
-                        )
-                    }
-                    <Button
-                    className="mt-3 w-full bg-zinc-900 hover:bg-zinc-950 transition-all"
-                    onClick={() => setIsWebCamEnabled(!isWebCamEnabled)}
-                    >
-                        {isWebCamEnabled ? "Disable" : "Enable"} access to your web camera and microphone
-                    </Button>
-                    </div>
+                    <WebCamera />
                 </div>
                 <Link
                 href={`/dashboard/interview/${mockId}/start`}>

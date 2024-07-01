@@ -73,7 +73,7 @@ function CreateNewInterview() {
         <>
             <div
             onClick={() => setOpen(true)}
-            className="py-10 antialiased cursor-pointer">
+            className="py-7 antialiased cursor-pointer">
                 <GlowingStarsBackgroundCard>
                     <div className="flex items-center">
                         <GlowingStarsTitle>Create New Interview</GlowingStarsTitle>

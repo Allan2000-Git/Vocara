@@ -21,10 +21,13 @@ export type InterviewDetails = {
 };
 
 export type AnswerType = {
+    id: string;
+    userId: string;
     mockId: string;
     question: string;
     possibleAnswer: string;
     userAnswer: string;
     feedback: string;
     overall_rating: number;
+    createdAt: string;
 };
