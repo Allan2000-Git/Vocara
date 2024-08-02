@@ -87,4 +87,9 @@
     input[type=number] {
       -moz-appearance: textfield;
     }
+
+    iframe {
+      width: 100%;
+      min-height: 100vh;
+    }
   }

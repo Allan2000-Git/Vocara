@@ -5,6 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { NavbarDemo } from "./_components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { InterviewContextProvider } from "@/context/InterviewContext";
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,6 +26,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${inter.variable}`}>
         <body className={inter.className}>
+          <NextTopLoader color="#FF8709" />
           <InterviewContextProvider>
             <NavbarDemo />
             {children}

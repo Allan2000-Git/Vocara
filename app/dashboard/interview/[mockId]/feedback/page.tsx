@@ -1,7 +1,6 @@
 "use client";
 
 import { getAnswersById } from '@/actions/interview';
-import { useInterviewContext } from '@/context/InterviewContext';
 import { AnswerType } from '@/types/types';
 import { useParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'

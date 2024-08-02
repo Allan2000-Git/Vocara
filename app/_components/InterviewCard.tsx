@@ -31,7 +31,10 @@ function InterviewCard({interview}:InterviewCardProps) {
                 <p className="font-medium">{interview.jobExperience} years of experience</p>
                 <p className="text-sm text-gray-600">Done on: {createdAt}</p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex justify-between mt-3">
+                <Link href={`/dashboard/interview/${interview.mockId}/start`}>
+                    <Button>Restart</Button>
+                </Link>
                 <Link href={`/dashboard/interview/${interview.mockId}/feedback`}>
                     <Button>Go to Feedback</Button>
                 </Link>
